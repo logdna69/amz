@@ -1,0 +1,8 @@
+SELECT *
+FROM drug
+WHERE formula IN (
+	SELECT formula
+	FROM drug
+	GROUP BY formula
+	HAVING COUNT(formula) = 1
+)

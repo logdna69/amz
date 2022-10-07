@@ -1,0 +1,132 @@
+--1 exp, 1--
+
+SELECT m.musician_ssn
+FROM musician as m, album as a
+WHERE m.musician_ssn = a.producer_ssn
+GROUP BY a.producer_ssn
+HAVING COUNT(a.producer_ssn) <= ALL(
+		SELECT COUNT(producer_ssn)
+		FROM album
+		GROUP BY producer_ssn
+	)
+
+--1 exp, 2--
+SELECT
+	m.*,
+	COUNT(p.instrument_id) as "Number of instruments"
+FROM
+	musician as m,
+	musician_instrument as p
+WHERE
+	m.musician_ssn  = p.musician_ssn
+GROUP BY p.musician_ssn
+HAVING COUNT(p.musician_ssn) >= 1
+
+--2 exp, 1--
+SELECT 
+	p.name,
+	COUNT(pr.doctor_ssn) as "Number of doctors"
+FROM 
+	doctor_drug_prescribe as pr,
+	patient as p
+WHERE 
+	p.ssn = pr.patient_ssn AND
+	pr.prescription_date LIKE "2013-01%"
+GROUP BY pr.patient_ssn
+
+
+--2 exp, 2--
+SELECT 
+	pc.*,
+	COUNT( pc.name ) as "Number of pharmacies"
+FROM
+	phar_company as pc,
+	phar_comp_pharmacy_contract as c
+WHERE
+	c.phar_comp_name = pc.name
+GROUP BY c.phar_comp_name
+HAVING COUNT( c.phar_comp_name ) >= ALL (
+	SELECT COUNT( c.phar_comp_name ) 
+	FROM
+		phar_comp_pharmacy_contract as c,
+		phar_company as pc
+	WHERE
+		pc.name = c.phar_comp_name
+	GROUP BY c.phar_comp_name
+)
+
+--executed till here--
+--3 exp, 1--
+
+ALTER TABLE install
+ADD charge INTEGER;
+
+UPDATE install
+SET charge = 800 
+WHERE tin_no = 5 AND pv_id = 2 AND house_no = 5;
+
+SELECT 
+	v.*,
+	i.charge
+FROM
+	vendor as v, 
+	install as i
+WHERE
+	v.tin_no = i.tin_no AND
+	i.charge >=(
+		SELECT AVG(charge)
+		FROM install
+	)
+----
+SELECT 
+	DISTINCT(v.tin_no)
+FROM
+	vendor as v, 
+	install as i
+WHERE
+	v.tin_no = i.tin_no AND
+	i.charge >=(
+		SELECT AVG(i.charge)
+		FROM install
+	)
+----
+SELECT *
+FROM vendor
+WHERE tin_no IN (
+	SELECT 
+		DISTINCT(v.tin_no)
+	FROM
+		vendor as v, 
+		install as i
+	WHERE
+		v.tin_no = i.tin_no AND
+		i.charge >=(
+			SELECT AVG(i.charge)
+			FROM install
+		)
+)
+
+
+--3 exp, 2--
+SELECT *
+FROM vendor as v
+WHERE
+	v.tin_no NOT IN (
+		SELECT tin_no
+		FROM install
+	)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

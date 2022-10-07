@@ -1,0 +1,232 @@
+//---------------------
+//Department
+//---------------------
+
+deptId1 = ObjectId()
+deptId2 = ObjectId()
+deptId3 = ObjectId()
+deptId4 = ObjectId()
+
+depts = [
+	{
+		_id: deptId1,
+		name: "MCA",
+		establisedOn: 2000,
+		place: "Bangalore",
+	},
+	{
+		_id: deptId2,
+		name: "MTech",
+		establisedOn: 2010,
+		place: "Mysuru",
+	},
+	{
+		_id: deptId3,
+		name: "BTech",
+		establisedOn: 2020,
+		place: "Mangalore",
+	},
+	{
+		_id: deptId4,
+		name: "PHD",
+		establisedOn: 2021,
+		place: "Chennai",
+	},
+]
+
+db.createCollection("departments")
+db.departments.insertMany(depts)
+db.departments.find().pretty()
+
+//----------------------
+//Project
+//----------------------
+
+projectId1 = ObjectId()
+projectId2 = ObjectId()
+projectId3 = ObjectId()
+projectId4 = ObjectId()
+
+projects = [
+	{
+		_id: projectId1,
+		title: "Web technologies",
+		technologies: ["HTML", "CSS", "JS"],
+		deptId: deptId1,
+	},
+	{
+		_id: projectId2,
+		title: "Application technologies",
+		technologies: ["Flutter", "Java", "Kotlin"],
+		deptId: deptId2,
+	},
+	{
+		_id: projectId3,
+		title: "Backend",
+		technologies: ["JS", "ExpressJS"],
+		deptId: deptId1,
+	},
+	{
+		_id: projectId4,
+		title: "Cloud",
+		technologies: ["AWS", "GCP"],
+		deptId: deptId4,
+	},
+]
+
+db.createCollection("projects")
+
+db.projects.insertMany(projects)
+db.projects.find().pretty()
+
+
+//-----------------------------------
+//Dependents
+//-----------------------------------
+
+dependentId1 = ObjectId()
+dependentId2 = ObjectId()
+dependentId3 = ObjectId()
+dependentId4 = ObjectId()
+dependentId5 = ObjectId()
+
+dependents = [
+	{
+		_id: dependentId1,
+		name: "Somu",
+		age: 21,
+	},
+	{
+		_id: dependentId2,
+		name: "Mangala",
+		age: 22,
+	},
+	{
+		_id: dependentId3,
+		name: "Suma",
+		age: 91,
+	},
+	{
+		_id: dependentId4,
+		name: "Ram",
+		age: 34,
+	},
+	{
+		_id: dependentId5,
+		name: "Bheem",
+		age: 29,
+	}
+]
+
+
+db.createCollection("dependents")
+db.dependents.insertMany(dependents)
+db.dependents.find()
+
+//--------------------------------------------
+//Employee
+//--------------------------------------------
+
+employees = [
+	{
+		name: "Raju",
+		ssn: "1RV23",
+		deptId: deptId2,
+		salary: 2000,
+		projects: [
+			{
+				projectId: projectId1,
+				nHours: 20
+			},
+			{
+				projectId: projectId2,
+				nHours: 2
+			},
+			{
+				projectId: projectId3,
+				nHours: 21
+			}
+		],
+		experience: 5,
+		dependents: [
+			{
+				dependentId: dependentId1,
+				relation: "Father"
+			},
+			{
+				dependentId: dependentId2,
+				relation: "Mother"
+			},
+		]
+	},
+	{
+		name: "Sham",
+		ssn: "1RV22",
+		deptId: deptId1,
+		salary: 2200,
+		projects: [
+			{
+				projectId: projectId3,
+				nHours: 10
+			},
+			{
+				projectId: projectId1,
+				nHours: 2
+			},
+			{
+				projectId: projectId3,
+				nHours: 5
+			}
+		],
+		experience: 15,
+		dependents: [
+			{
+				dependentId: dependentId4,
+				relation: "Uncle"
+			},
+			{
+				dependentId: dependentId5,
+				relation: "Father"
+			},
+		]
+	},
+	{
+		name: "Roopa",
+		ssn: "1RV21",
+		deptId: deptId4,
+		salary: 3000,
+		projects: [
+			{
+				projectId: projectId4,
+				nHours: 20
+			},
+		],
+		experience: 9,
+		dependents: [
+			{
+				dependentId: dependentId5,
+				relation: "Uncle"
+			},
+		]
+	}
+]
+
+db.createCollection("employees")
+db.employees.insertMany(employees)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
